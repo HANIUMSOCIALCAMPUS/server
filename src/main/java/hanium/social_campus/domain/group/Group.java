@@ -22,9 +22,9 @@ public class Group extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private GroupType groupType;
 
-    @ManyToOne
-    @JoinColumn(name = "groupCategory_id")
-    private GroupCategory groupCategory;
+//    @ManyToOne
+//    @JoinColumn(name = "groupCategory_id")
+//    private GroupCategory groupCategory;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<Join> joins = new ArrayList<>();
