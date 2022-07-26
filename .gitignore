@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### yml ###
-db.yml
+spring.yml
