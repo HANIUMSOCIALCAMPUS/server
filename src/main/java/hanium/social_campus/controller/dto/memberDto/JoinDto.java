@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class JoinDto {
@@ -30,6 +31,6 @@ public class JoinDto {
     @NotBlank
     private String dept;
 
-    @NotBlank
+    @NotNull
     private Integer sno;
 }
