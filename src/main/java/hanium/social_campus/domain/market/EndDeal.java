@@ -1,7 +1,7 @@
 package hanium.social_campus.domain.market;
 
 import hanium.social_campus.domain.BaseEntity;
-import hanium.social_campus.domain.User;
+import hanium.social_campus.domain.Member;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -17,11 +17,11 @@ public class EndDeal extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="seller_id")
-    private User seller;
+    private Member seller;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id")
-    private User buyer;
+    private Member buyer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")

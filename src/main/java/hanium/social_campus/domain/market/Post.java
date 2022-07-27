@@ -1,7 +1,7 @@
 package hanium.social_campus.domain.market;
 
 import hanium.social_campus.domain.BaseEntity;
-import hanium.social_campus.domain.User;
+import hanium.social_campus.domain.Member;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -16,8 +16,8 @@ public class Post extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private String title;
 
