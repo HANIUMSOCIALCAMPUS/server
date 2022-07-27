@@ -16,6 +16,7 @@ public class MemberRepository {
 
     private final EntityManager em;
 
+    @Transactional
     public void join(Member member) {
         em.persist(member);
     }
