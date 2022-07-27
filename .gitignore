@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### yml ###
-spring.yml
+mail.yml
