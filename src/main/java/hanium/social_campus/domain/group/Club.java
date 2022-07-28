@@ -24,7 +24,7 @@ public class Club extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ClubType clubType;
 
-
+    // 그룹 삭제 시 참가도 삭제
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<Participation> participations = new ArrayList<>();
 
@@ -36,6 +36,7 @@ public class Club extends BaseEntity {
 
         return club;
     }
+
 
     public void updateClub(String clubName, int maximumCount, ClubType clubType){
         this.clubName = clubName;

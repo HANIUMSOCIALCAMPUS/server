@@ -6,6 +6,7 @@ import hanium.social_campus.controller.dto.memberDto.MemberInfoDto;
 import hanium.social_campus.domain.Member;
 import hanium.social_campus.domain.group.Club;
 import hanium.social_campus.domain.group.Participation;
+import hanium.social_campus.repository.ClubRepository;
 import hanium.social_campus.repository.ParticipationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ import java.util.List;
 public class ClubServiceImpl implements ClubService{
 
     private final ParticipationRepository participationRepository;
+    private final ClubRepository clubRepository;
+
 
     @Override
     public ClubInfoDto createClub(Member member, ClubCreateDto clubCreateDto) throws Exception {
@@ -34,13 +37,14 @@ public class ClubServiceImpl implements ClubService{
     @Override
     public ClubInfoDto participateClub(Member member, Club club) throws Exception {
 
-        Participation participation = Participation.builder()
-                .member(member)
-                .club(club)
-                .build();
-
-        // 참가 정보 저장
-        participationRepository.save(participation);
+        if (participationRepository.existsByClubIdAndMemberId(club.getId(), member.getId())){   // 이미 가입된 상태
+            throw new Exception("해당 그룹에 가입된 상태입니다.");
+        } else if (club.getMaximumCount() == participationRepository.findByClubId(club.getId()).size()) {   // 그룹이 꽉 찬 상태
+            throw new Exception("그룹에 더 이상 참여할 수 없습니다.");
+        } else {
+            Participation participation = Participation.create(member, club);   // 참가 정보 생성
+            participationRepository.save(participation);    // 참가 정보 저장
+        }
 
         List<Participation> participations = participationRepository.findByClubId(club.getId());
         List<MemberInfoDto> memberInfoDtos = new ArrayList<>();
@@ -62,10 +66,11 @@ public class ClubServiceImpl implements ClubService{
     @Override
     public void deleteClub(Member member, Club club) throws Exception {
 
+        // 방장의 경우 그룹 및 참가 삭제
         if (member.getId() == participationRepository.findMemberIdByClubId(club.getId())){
-            participationRepository.deleteByClubId(club.getId());
+            clubRepository.delete(club);
         } else {
-            new Exception("방장인 사용자만 그룹 삭제가 가능합니다");
+            throw new Exception("방장인 사용자만 그룹 삭제가 가능합니다");
         }
 
     }

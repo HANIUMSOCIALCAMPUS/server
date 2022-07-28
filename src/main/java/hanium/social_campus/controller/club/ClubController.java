@@ -3,6 +3,7 @@ package hanium.social_campus.controller.club;
 import hanium.social_campus.auth.config.SecurityUtil;
 import hanium.social_campus.controller.dto.clubDto.ClubCreateDto;
 import hanium.social_campus.controller.dto.clubDto.ClubInfoDto;
+import hanium.social_campus.controller.exception.ErrorCode;
 import hanium.social_campus.domain.Member;
 import hanium.social_campus.domain.group.Club;
 import hanium.social_campus.repository.ClubRepository;
@@ -17,6 +18,7 @@ import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 public class ClubController {
 
     private final MemberRepository memberRepository;
@@ -31,7 +33,7 @@ public class ClubController {
 
         try{
             Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
-                    () -> new EntityNotFoundException("회원을 찾을 수 없습니다.")
+                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
             );
 
             ClubInfoDto clubInfoDto = clubService.createClub(member, clubCreateDto);
@@ -52,11 +54,11 @@ public class ClubController {
 
         try {
             Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
-                    () -> new EntityNotFoundException("회원을 찾을 수 없습니다.")
+                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
             );
 
             Club club = clubRepository.findById(clubId).orElseThrow(
-                    () -> new EntityNotFoundException("그룹을 찾을 수 없습니다.")
+                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
             );
 
             ClubInfoDto clubInfoDto = clubService.participateClub(member, club);
@@ -77,11 +79,11 @@ public class ClubController {
 
         try {
             Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
-                    () -> new EntityNotFoundException("회원을 찾을 수 없습니다.")
+                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
             );
 
             Club club = clubRepository.findById(clubId).orElseThrow(
-                    () -> new EntityNotFoundException("그룹을 찾을 수 없습니다.")
+                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
             );
 
             clubService.deleteClub(member, club);
