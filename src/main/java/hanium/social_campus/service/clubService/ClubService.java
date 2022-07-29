@@ -11,9 +11,11 @@ public interface ClubService {
      * 클럽 생성
      * 클럽 참가
      * 클럽 삭제
+     * 클럽 탈퇴
      */
 
     ClubInfoDto createClub(Member member, ClubCreateDto clubCreateDto) throws Exception;
     ClubInfoDto participateClub(Member member, Club club) throws Exception;
     void deleteClub(Member member, Club club) throws Exception;
+    void leaveClub(Member member, Club club) throws Exception;
 }

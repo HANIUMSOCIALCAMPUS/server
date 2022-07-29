@@ -18,7 +18,6 @@ import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
 public class ClubController {
 
     private final MemberRepository memberRepository;
@@ -87,6 +86,30 @@ public class ClubController {
             );
 
             clubService.deleteClub(member, club);
+
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    /**
+     * 클럽 탈퇴
+     */
+    @PostMapping("/club/leave/{club_id}")
+    public ResponseEntity leaveClub(@PathVariable(name = "club_id") Long clubId){
+
+        try {
+            Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
+            );
+
+            Club club = clubRepository.findById(clubId).orElseThrow(
+                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
+            );
+
+            clubService.leaveClub(member, club);
 
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e){
