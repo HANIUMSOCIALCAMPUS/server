@@ -18,31 +18,31 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResult RuntimeExceptionHandler(RuntimeException e) {
-        return new ErrorResult(e.getMessage());
-    }
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ErrorResult RuntimeExceptionHandler(RuntimeException e) {
+//        return new ErrorResult(e.getMessage());
+//    }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResult error(MethodArgumentNotValidException e) {
-        List<ErrorResult> errorList = new ArrayList<>();
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ErrorResult error(MethodArgumentNotValidException e) {
+//        List<ErrorResult> errorList = new ArrayList<>();
+//
+//        String message = "";
+//
+//        for (ObjectError error : e.getBindingResult().getAllErrors()) {
+//            message = error.getDefaultMessage();
+//            errorList.add(new ErrorResult(message));
+//        }
+//        return new ErrorResult(errorList);
+//    }
 
-        String message = "";
-
-        for (ObjectError error : e.getBindingResult().getAllErrors()) {
-            message = error.getDefaultMessage();
-            errorList.add(new ErrorResult(message));
-        }
-        return new ErrorResult(errorList);
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResult error(HttpMessageNotReadableException e) {
-        return new ErrorResult("타입이 맞지 않습니다");
-    }
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ErrorResult error(HttpMessageNotReadableException e) {
+//        return new ErrorResult("타입이 맞지 않습니다");
+//    }
 
     /**
      * 로그인 실패
@@ -50,13 +50,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResult BadCredentialsExceptionHandler(BadCredentialsException e) {
-        return new ErrorResult(ErrorCode.BAD_CREDENTIALS.getMessage());
+        return new ErrorResult(300, "로그인 실패");
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResult ApiException(ApiException e) {
+        return new ErrorResult(e.getErrorCode().getCode(), e.getErrorCode().getMessage());
     }
 
 
     @Getter
     @AllArgsConstructor
-    static class ErrorResult<T>{
-        private T message;
+    static class ErrorResult{
+        private int code;
+        private String message;
     }
 }

@@ -1,4 +1,4 @@
-package hanium.social_campus.service.clubService;
+package hanium.social_campus.service.club;
 
 import hanium.social_campus.controller.dto.clubDto.ClubCreateDto;
 import hanium.social_campus.controller.dto.clubDto.ClubInfoDto;
@@ -9,8 +9,8 @@ import hanium.social_campus.domain.Member;
 import hanium.social_campus.domain.group.Club;
 import hanium.social_campus.domain.group.ClubType;
 import hanium.social_campus.domain.group.Participation;
-import hanium.social_campus.repository.ClubRepository;
-import hanium.social_campus.repository.ParticipationRepository;
+import hanium.social_campus.repository.club.ClubRepository;
+import hanium.social_campus.repository.club.ParticipationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

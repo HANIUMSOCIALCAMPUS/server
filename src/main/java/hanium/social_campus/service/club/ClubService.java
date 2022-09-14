@@ -1,4 +1,4 @@
-package hanium.social_campus.service.clubService;
+package hanium.social_campus.service.club;
 
 import hanium.social_campus.controller.dto.clubDto.ClubCreateDto;
 import hanium.social_campus.controller.dto.clubDto.ClubInfoDto;

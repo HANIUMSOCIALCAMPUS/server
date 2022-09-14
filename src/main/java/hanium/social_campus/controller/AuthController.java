@@ -30,23 +30,21 @@ public class AuthController {
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity signIn(@RequestBody @Validated LoginDto loginDto, HttpServletResponse response) {
+    public void signIn(@RequestBody @Validated LoginDto loginDto, HttpServletResponse response) {
 
         TokenDto tokenDto = authService.signIn(loginDto);
 
         response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
-
-        return ResponseEntity.ok(new AccessTokenDto(tokenDto.getAccessToken()));
+        response.setHeader("Authorization", "Bearer "+tokenDto.getAccessToken());
 
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity refresh(@CookieValue(name = "RefreshToken") String refreshToken, HttpServletResponse response) {
+    public void refresh(@CookieValue(name = "RefreshToken") String refreshToken, HttpServletResponse response) {
         TokenDto tokenDto = authService.refresh(refreshToken);
 
         response.setHeader("Set-Cookie", setRefreshToken(tokenDto.getRefreshToken()).toString());
-
-        return ResponseEntity.ok(new AccessTokenDto(tokenDto.getAccessToken()));
+        response.setHeader("Authorization", "Bearer "+tokenDto.getAccessToken());
     }
 
     public ResponseCookie setRefreshToken(String refreshToken) {
