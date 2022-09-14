@@ -1,12 +1,15 @@
 package hanium.social_campus.domain.market;
 
 import hanium.social_campus.domain.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostImage extends BaseEntity {
 
     @Id
@@ -19,4 +22,12 @@ public class PostImage extends BaseEntity {
     private Post post;
 
     private String url;
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public PostImage(String url) {
+        this.url = url;
+    }
 }

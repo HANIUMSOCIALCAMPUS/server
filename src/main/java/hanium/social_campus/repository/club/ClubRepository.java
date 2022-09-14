@@ -1,4 +1,4 @@
-package hanium.social_campus.repository;
+package hanium.social_campus.repository.club;
 
 import hanium.social_campus.domain.group.Club;
 import hanium.social_campus.domain.group.ClubType;

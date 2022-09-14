@@ -36,7 +36,7 @@ public class AuthService {
                 .authority(Authority.ROLE_USER)
                 .build();
 
-        memberRepository.join(member);
+        memberRepository.save(member);
     }
 
     public TokenDto signIn(LoginDto loginDto) {
