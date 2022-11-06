@@ -1,5 +1,6 @@
 package hanium.social_campus.domain;
 
+import hanium.social_campus.controller.dto.memberDto.MemberInfoDto;
 import hanium.social_campus.domain.group.Participation;
 import hanium.social_campus.domain.market.Post;
 import lombok.AccessLevel;
@@ -25,7 +26,7 @@ public class Member extends BaseEntity {
 
     private String password;
 
-    private String nickName;
+    private String nickname;
 
     private String email;
 
@@ -47,16 +48,20 @@ public class Member extends BaseEntity {
     private List<Participation> participations = new ArrayList<>();
 
     @Builder
-    public Member(String loginId, String password, String nickName, String email, String sex
+    public Member(String loginId, String password, String nickname, String email, String sex
                   ,String university, String dept, Integer sno, Authority authority) {
         this.loginId = loginId;
         this.password = password;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.email = email;
         this.sex = sex;
         this.university = university;
         this.dept = dept;
         this.sno = sno;
         this.authority = authority;
+    }
+
+    public MemberInfoDto toMemberInfoDto(){
+        return new MemberInfoDto(this);
     }
 }

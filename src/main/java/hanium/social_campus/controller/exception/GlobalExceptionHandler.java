@@ -20,9 +20,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResult RuntimeExceptionHandler(RuntimeException e) {
-        return new ErrorResult(e.getMessage());
+    public ErrorResult handleDropTheCodeException(SocialException e) {
+        return new ErrorResult(e.getErrorCode().getMessage());
     }
+
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)

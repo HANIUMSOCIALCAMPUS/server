@@ -6,13 +6,18 @@ import hanium.social_campus.controller.dto.memberDto.JoinDto;
 import hanium.social_campus.controller.dto.memberDto.LoginDto;
 import hanium.social_campus.domain.Authority;
 import hanium.social_campus.domain.Member;
+import hanium.social_campus.domain.email.VerifyCode;
 import hanium.social_campus.repository.MemberRepository;
+import hanium.social_campus.service.email.VerifyCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +27,7 @@ public class AuthService {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final PasswordEncoder passwordEncoder;
+    private final VerifyCodeService verifyCodeService;
 
     public void signUp(JoinDto joinDto) {
         Member member = Member.builder()
@@ -29,7 +35,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(joinDto.getPassword()))
                 .email(joinDto.getEmail())
                 .sex(joinDto.getSex())
-                .nickName(joinDto.getNickName())
+                .nickname(joinDto.getNickname())
                 .university(joinDto.getUniversity())
                 .dept(joinDto.getDept())
                 .sno(joinDto.getSno())
@@ -56,6 +62,20 @@ public class AuthService {
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
         return tokenDto;
+    }
+
+    /**
+     * 이메일 인증 코드 확인
+     * @param code
+     * @return
+     */
+    @Transactional
+    public Optional<VerifyCode> confirmEmail(String code) {
+        Optional<VerifyCode> findCode = verifyCodeService.findExpiredCode(code);
+        if (findCode.isPresent()) {
+            findCode.get().useCode();
+        }
+        return findCode;
     }
 
 }

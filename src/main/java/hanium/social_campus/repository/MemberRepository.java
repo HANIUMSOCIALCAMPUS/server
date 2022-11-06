@@ -21,13 +21,20 @@ public class MemberRepository {
         em.persist(member);
     }
 
-    public Member findById(Long id) {
-        return em.find(Member.class, id);
+    public Optional<Member> findById(Long id) {
+        return Optional.ofNullable(em.find(Member.class, id));
     }
 
     public Optional<Member> findByLoginId(String loginId){
         return em.createQuery("select m from Member m where m.loginId = :loginId", Member.class)
                 .setParameter("loginId", loginId)
+                .getResultList()
+                .stream().findFirst();
+    }
+
+    public Optional<Member> findByNickname(String nickname) {
+        return em.createQuery("select m from Member m where m.nickname = :nickname", Member.class)
+                .setParameter("nickname", nickname)
                 .getResultList()
                 .stream().findFirst();
     }

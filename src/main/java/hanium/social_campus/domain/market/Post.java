@@ -29,6 +29,6 @@ public class Post extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private Integer likes;
+    private int price;
 
 }
