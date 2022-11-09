@@ -1,4 +1,4 @@
-package hanium.social_campus.controller;
+package hanium.social_campus.controller.club;
 
 import hanium.social_campus.auth.config.SecurityUtil;
 import hanium.social_campus.controller.dto.clubDto.ClubCreateDto;

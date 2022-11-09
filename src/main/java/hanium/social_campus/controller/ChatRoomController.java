@@ -7,7 +7,7 @@ import hanium.social_campus.controller.exception.SocialException;
 import hanium.social_campus.domain.chat.Chat;
 import hanium.social_campus.domain.group.Club;
 import hanium.social_campus.repository.ChatRepository;
-import hanium.social_campus.repository.ClubRepository;
+import hanium.social_campus.repository.club.ClubRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.listener.ChannelTopic;

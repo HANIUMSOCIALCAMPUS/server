@@ -22,7 +22,7 @@ public class PostListDto {
         title = post.getTitle();
         dealType = post.getDealType().getValue();
         status = post.getStatus().getValue();
-        sellerName = post.getMember().getNickName();
+        sellerName = post.getMember().getNickname();
         sellerSex = post.getMember().getSex();
     }
 }
