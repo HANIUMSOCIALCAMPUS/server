@@ -1,4 +1,4 @@
-package hanium.social_campus.controller.club;
+package hanium.social_campus.controller;
 
 import hanium.social_campus.auth.config.SecurityUtil;
 import hanium.social_campus.controller.dto.clubDto.ClubCreateDto;
@@ -6,6 +6,7 @@ import hanium.social_campus.controller.dto.clubDto.ClubInfoDto;
 import hanium.social_campus.controller.dto.clubDto.ClubListInfoDto;
 import hanium.social_campus.controller.dto.clubDto.ClubUpdateDto;
 import hanium.social_campus.controller.exception.ErrorCode;
+import hanium.social_campus.controller.exception.SocialException;
 import hanium.social_campus.domain.Member;
 import hanium.social_campus.domain.group.Club;
 import hanium.social_campus.domain.group.ClubType;
@@ -13,20 +14,33 @@ import hanium.social_campus.repository.MemberRepository;
 import hanium.social_campus.repository.club.ClubRepository;
 import hanium.social_campus.service.club.ClubService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class ClubController {
 
     private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
     private final ClubService clubService;
+
+
+    public Member getMember(){
+        return memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new SocialException(ErrorCode.NOT_FOUND_MEMBER)
+        );
+    }
+
+    public Club findClub(Long clubId){
+        return clubRepository.findById(clubId).orElseThrow(
+                () -> new SocialException(ErrorCode.NOT_FOUND_CLUB)
+        );
+    }
 
     /**
      * 클럽 목록 반환
@@ -34,13 +48,34 @@ public class ClubController {
     @GetMapping("/clubs/{clubType}")
     public ResponseEntity clubList(@PathVariable(name = "clubType") ClubType clubType){
 
-        try {
-            List<ClubListInfoDto> clubListInfoDtos = clubService.clubs(clubType);
+        List<ClubListInfoDto> clubListInfoDtos = clubService.clubs(clubType);
 
-            return new ResponseEntity(clubListInfoDtos, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        return ResponseEntity.ok(clubListInfoDtos);
+    }
+
+
+    /**
+     * 키워드로 클럽 검색
+     */
+    @GetMapping("/club/search")
+    public ResponseEntity findClub(@RequestParam(name = "keyword") String keyword,
+                                     @RequestParam(name = "offset") int offset){
+
+        List<ClubListInfoDto> clubListInfoDtos = clubService.searchClub(keyword, offset);
+
+        return ResponseEntity.ok(clubListInfoDtos);
+    }
+
+
+    /**
+     * 그룹 및 참가자 정보 반환
+     */
+    @GetMapping("/club/{club_id}/info")
+    public ResponseEntity clubInfo(@PathVariable(name = "club_id") Long clubId){
+
+        Club club = findClub(clubId);
+
+        return ResponseEntity.ok(new ClubInfoDto(club));
     }
 
 
@@ -50,18 +85,11 @@ public class ClubController {
     @PostMapping("/club")
     public ResponseEntity createClub(@RequestBody ClubCreateDto clubCreateDto){
 
-        try{
-            Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
-                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
-            );
+        Member member = getMember();
 
-            ClubInfoDto clubInfoDto = clubService.createClub(member, clubCreateDto);
+        ClubInfoDto clubInfoDto = clubService.createClub(member, clubCreateDto);
 
-            return new ResponseEntity(clubInfoDto, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-
+        return ResponseEntity.ok(clubInfoDto);
     }
 
 
@@ -71,22 +99,12 @@ public class ClubController {
     @PostMapping("/club/{club_id}")
     public ResponseEntity joinClub(@PathVariable(name = "club_id") Long clubId){
 
-        try {
-            Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
-                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
-            );
+        Member member = getMember();
+        Club club = findClub(clubId);
 
-            Club club = clubRepository.findById(clubId).orElseThrow(
-                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
-            );
+        ClubInfoDto clubInfoDto = clubService.participateClub(member, club);
 
-            ClubInfoDto clubInfoDto = clubService.participateClub(member, club);
-
-            return new ResponseEntity(clubInfoDto, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-
+        return ResponseEntity.ok(clubInfoDto);
     }
 
 
@@ -96,21 +114,12 @@ public class ClubController {
     @PutMapping("/club/{club_id}")
     public ResponseEntity updateClub(@PathVariable(name = "club_id") Long clubId, @RequestBody ClubUpdateDto clubUpdateDto){
 
-        try {
-            Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
-                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
-            );
+        Member member = getMember();
+        Club club = findClub(clubId);
 
-            Club club = clubRepository.findById(clubId).orElseThrow(
-                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
-            );
+        ClubInfoDto clubInfoDto = clubService.updateClub(member, club, clubUpdateDto);
 
-            ClubInfoDto clubInfoDto = clubService.updateClub(member, club, clubUpdateDto);
-
-            return new ResponseEntity(clubInfoDto, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        return ResponseEntity.ok(clubInfoDto);
     }
 
 
@@ -120,21 +129,12 @@ public class ClubController {
     @DeleteMapping("/club/{club_id}")
     public ResponseEntity deleteClub(@PathVariable(name = "club_id") Long clubId){
 
-        try {
-            Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
-                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
-            );
+        Member member = getMember();
+        Club club = findClub(clubId);
 
-            Club club = clubRepository.findById(clubId).orElseThrow(
-                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
-            );
+        clubService.deleteClub(member, club);
 
-            clubService.deleteClub(member, club);
-
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        return ResponseEntity.ok(true);
     }
 
 
@@ -144,21 +144,44 @@ public class ClubController {
     @PostMapping("/club/leave/{club_id}")
     public ResponseEntity leaveClub(@PathVariable(name = "club_id") Long clubId){
 
-        try {
-            Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
-                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
-            );
+        Member member = getMember();
+        Club club = findClub(clubId);
 
-            Club club = clubRepository.findById(clubId).orElseThrow(
-                    () -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.getMessage())
-            );
+        clubService.leaveClub(member, club);
 
-            clubService.leaveClub(member, club);
+        return ResponseEntity.ok(true);
+    }
 
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+
+    /**
+     * 내 클럽 목록 반환
+     */
+    @GetMapping("/clubs")
+    public ResponseEntity myClubs(){
+
+        Member member = getMember();
+
+        List<ClubListInfoDto> clubListInfoDtos = clubService.myClubs(member);
+
+        return ResponseEntity.ok(clubListInfoDtos);
+    }
+
+
+    /**
+     * 클럽원 강퇴
+     */
+    @PostMapping("/club/{club_id}/kick-out")
+    public ResponseEntity kickOut(@PathVariable(name = "club_id") Long clubId, @RequestBody Map<String, Long> memberId){
+
+        Member member = getMember();
+        Member kickMember = memberRepository.findById(memberId.get("memberId")).orElseThrow(
+                () -> new SocialException(ErrorCode.NOT_FOUND_MEMBER)
+        );
+        Club club = findClub(clubId);
+
+        clubService.kickOut(member, kickMember, club);
+
+        return ResponseEntity.ok(new ClubInfoDto(club));
     }
 
 
