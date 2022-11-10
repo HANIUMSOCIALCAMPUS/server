@@ -20,15 +20,15 @@ public class MemberController {
 
     private final MemberRepository memberRepository;
 
-    @GetMapping("/mypage")
-    public ResponseEntity mypage() {
+    @GetMapping("/user")
+    public ResponseEntity myPage() {
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new EntityNotFoundException("존재하지 않는 회원입니다.")
         );
-        return ResponseEntity.ok(new MyDto(member.getNickName(), member.getEmail()));
+        return ResponseEntity.ok(new MyDto(member.getNickname(), member.getEmail()));
     }
 
-    @PostMapping("/log-out")
+    @PostMapping("/logout")
     public void logOut(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("RefreshToken", null)
                 .maxAge(0)

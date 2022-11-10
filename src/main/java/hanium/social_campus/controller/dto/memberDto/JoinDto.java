@@ -16,7 +16,7 @@ public class JoinDto {
     private String password;
 
     @NotBlank
-    private String nickName;
+    private String nickname;
 
     @NotBlank
     @Email
