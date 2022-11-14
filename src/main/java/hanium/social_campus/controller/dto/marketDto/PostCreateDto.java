@@ -16,7 +16,4 @@ public class PostCreateDto {
 
     private String dealType;
 
-    private List<String> postImageUrl;
-
-
 }

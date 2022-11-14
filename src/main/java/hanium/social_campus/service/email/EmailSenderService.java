@@ -1,8 +1,10 @@
 package hanium.social_campus.service.email;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 

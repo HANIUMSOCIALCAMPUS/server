@@ -18,32 +18,6 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ErrorResult RuntimeExceptionHandler(RuntimeException e) {
-//        return new ErrorResult(e.getMessage());
-//    }
-
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ErrorResult error(MethodArgumentNotValidException e) {
-//        List<ErrorResult> errorList = new ArrayList<>();
-//
-//        String message = "";
-//
-//        for (ObjectError error : e.getBindingResult().getAllErrors()) {
-//            message = error.getDefaultMessage();
-//            errorList.add(new ErrorResult(message));
-//        }
-//        return new ErrorResult(errorList);
-//    }
-
-
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ErrorResult error(HttpMessageNotReadableException e) {
-//        return new ErrorResult("타입이 맞지 않습니다");
-//    }
 
     /**
      * 로그인 실패
