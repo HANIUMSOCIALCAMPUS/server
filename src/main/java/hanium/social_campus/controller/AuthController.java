@@ -1,6 +1,5 @@
 package hanium.social_campus.controller;
 
-import hanium.social_campus.auth.jwt.AccessTokenDto;
 import hanium.social_campus.auth.jwt.TokenDto;
 import hanium.social_campus.controller.dto.memberDto.JoinDto;
 import hanium.social_campus.controller.dto.memberDto.LoginDto;

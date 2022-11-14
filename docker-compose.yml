@@ -1,0 +1,8 @@
+version: '3'
+services:
+  redis:
+    container_name: redis_market
+    image: redis:latest
+    ports:
+      - "6380:6380"
+    restart: always

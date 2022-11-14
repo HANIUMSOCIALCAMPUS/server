@@ -45,12 +45,6 @@ public class GlobalExceptionHandler {
 //        return new ErrorResult("타입이 맞지 않습니다");
 //    }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResult handleDropTheCodeException(SocialException e) {
-        return new ErrorResult(e.getErrorCode().getCode(), e.getMessage());
-    }
-
     /**
      * 로그인 실패
      */
