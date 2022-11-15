@@ -27,7 +27,11 @@ public enum ErrorCode {
     // etc
     RUNTIME(100, "런타임에러"),
     ENTITY_NOT_FOUND(200, "찾을 수 없는 엔티티"),
-    BAD_CREDENTIALS(300, "로그인 실패");
+    BAD_CREDENTIALS(300, "로그인 실패"),
+
+    // market
+    NOT_FOUND_MARKET(1400, "게시물을 찾을 수 없습니다"),
+    NOT_EXIT_POSTS(1401, "조회결과가 없습니다");
 
 
     private int code;

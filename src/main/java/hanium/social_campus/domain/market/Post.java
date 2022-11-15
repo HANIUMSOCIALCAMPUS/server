@@ -54,4 +54,10 @@ public class Post extends BaseEntity {
         return post;
     }
 
+    public void edit(String title, String description, int price) {
+        this.title = title;
+        this.description = description;
+        this.price = price;
+    }
+
 }

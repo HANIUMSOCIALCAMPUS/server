@@ -7,22 +7,24 @@ import lombok.Data;
 public class PostListDto {
 
     private Long id;
+
     private String title;
 
-    private String dealType;
+    private int price;
 
     private String status;
 
-    private String sellerName;
+    private String nickname;
 
-    private String sellerSex;
+    // 대표이미지
+    private String postImageUrl;
 
     public PostListDto(Post post) {
         id = post.getId();
         title = post.getTitle();
-        dealType = post.getDealType().getValue();
+        price = post.getPrice();
         status = post.getStatus().getValue();
-        sellerName = post.getMember().getNickname();
-        sellerSex = post.getMember().getSex();
+        nickname = post.getMember().getNickname();
+        postImageUrl = post.getPostImages().get(0).getUrl();
     }
 }
