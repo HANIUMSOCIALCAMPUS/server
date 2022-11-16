@@ -42,7 +42,7 @@ public class PostService {
     public List<PostListDto> postListByDealType(String dealType) {
         List<Post> posts = postRepository.findByDealType(DealType.from(dealType));
         if (posts.size() == 0) {
-            throw new ApiException(NOT_EXIT_POSTS);
+            return new ArrayList<>();
         }
         List<PostListDto> returnPosts = posts.stream().map(PostListDto::new).collect(Collectors.toList());
         return returnPosts;

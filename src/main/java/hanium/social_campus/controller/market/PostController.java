@@ -6,6 +6,7 @@ import hanium.social_campus.controller.dto.marketDto.PostEditDto;
 import hanium.social_campus.controller.dto.marketDto.PostListDto;
 import hanium.social_campus.service.market.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/user/post")
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class PostController {
@@ -33,6 +35,7 @@ public class PostController {
     @PostMapping
     public void createPost(@RequestPart(value = "postReq") PostCreateDto postCreateDto,
                            @RequestPart(name = "images")List<MultipartFile> images) throws IOException {
+        log.info(postCreateDto.toString());
         postService.createPost(postCreateDto, images);
     }
 

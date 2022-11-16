@@ -34,11 +34,11 @@ public enum ErrorCode {
     NOT_EXIT_POSTS(1401, "조회결과가 없습니다");
 
 
-    private int code;
-    private String message;
+    private final int code;
+    private final String message;
 
 
-    private ErrorCode(int code,String message) {
+    ErrorCode(int code,String message) {
         this.code = code;
         this.message = message;
     }

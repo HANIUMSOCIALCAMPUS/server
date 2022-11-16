@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResult BadCredentialsExceptionHandler(BadCredentialsException e) {
-        return new ErrorResult(300, "로그인 실패");
+        return new ErrorResult(1001, "로그인 실패");
     }
 
     @ExceptionHandler
@@ -35,10 +35,4 @@ public class GlobalExceptionHandler {
     }
 
 
-    @Getter
-    @AllArgsConstructor
-    static class ErrorResult{
-        private int code;
-        private String message;
-    }
 }

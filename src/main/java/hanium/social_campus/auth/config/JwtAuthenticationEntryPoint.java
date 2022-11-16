@@ -1,5 +1,7 @@
 package hanium.social_campus.auth.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import hanium.social_campus.controller.exception.ErrorResult;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,10 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String errorJson = objectMapper.writeValueAsString(new ErrorResult(1000, "토큰 만료"));
+        response.getWriter().print(errorJson);
     }
 }
