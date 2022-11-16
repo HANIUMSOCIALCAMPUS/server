@@ -31,7 +31,8 @@ public enum ErrorCode {
 
     // market
     NOT_FOUND_MARKET(1400, "게시물을 찾을 수 없습니다"),
-    NOT_EXIT_POSTS(1401, "조회결과가 없습니다");
+    NOT_EXIT_POSTS(1401, "조회결과가 없습니다"),
+    ALREADY_DELETE(1402, "삭제처리된 게시물입니다");
 
 
     private final int code;

@@ -1,7 +1,9 @@
 package hanium.social_campus.domain.chat;
 
 import hanium.social_campus.domain.group.Club;
+import hanium.social_campus.domain.market.Post;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class ChatRoom {
 
     @Id
@@ -22,6 +25,7 @@ public class ChatRoom {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
+
 
 
     public void insertClub(Club club){

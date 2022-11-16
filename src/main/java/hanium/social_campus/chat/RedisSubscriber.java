@@ -2,7 +2,6 @@ package hanium.social_campus.chat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hanium.social_campus.controller.dto.chatDto.ChatMessageResponseDto;
-import hanium.social_campus.controller.exception.ErrorCode;
 import hanium.social_campus.controller.exception.SocialException;
 import hanium.social_campus.domain.chat.Chat;
 import hanium.social_campus.repository.ChatRepository;
@@ -13,6 +12,8 @@ import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
+
+import static hanium.social_campus.controller.exception.ErrorCode.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class RedisSubscriber implements MessageListener {
             ChatMessageResponseDto roomMessage = objectMapper.readValue(publishMessage, ChatMessageResponseDto.class);
 
             Chat chat = chatRepository.findById(roomMessage.getChatId()).orElseThrow(
-                    () -> new SocialException(ErrorCode.NOT_FOUND_CHATROOM)
+                    () -> new SocialException(NOT_FOUND_CHATROOM)
             );
             // 브로드캐스팅
             messagingTemplate.convertAndSend("/sub/chat/" + chat.getChatRoom().getId(), roomMessage);

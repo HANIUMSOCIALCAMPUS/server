@@ -2,6 +2,8 @@ package hanium.social_campus.repository.market;
 
 import hanium.social_campus.domain.market.DealType;
 import hanium.social_campus.domain.market.Post;
+import hanium.social_campus.domain.market.Status;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,8 +19,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByDealType(DealType dealType);
 
     // 상세 조회
-    @EntityGraph(attributePaths = {"member", "postImages"})
+    @EntityGraph(attributePaths = {"member", "postImages", "chatRoom"})
     @Query("select p from Post p where p.id = :id")
     Optional<Post> findByIdDetail(@Param("id") Long id);
+
 
 }

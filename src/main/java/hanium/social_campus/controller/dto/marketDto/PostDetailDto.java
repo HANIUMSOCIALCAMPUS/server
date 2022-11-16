@@ -24,6 +24,8 @@ public class PostDetailDto {
 
     private List<String> postImageUrls;
 
+    private Long chatRoomId;
+
     public PostDetailDto(Post post) {
         title = post.getTitle();
         description = post.getDescription();
@@ -32,5 +34,6 @@ public class PostDetailDto {
         dealType = post.getDealType().getValue();
         status = post.getStatus().getValue();
         postImageUrls = post.getPostImages().stream().map(PostImage::getUrl).collect(Collectors.toList());
+        chatRoomId = post.getChatRoom().getId();
     }
 }

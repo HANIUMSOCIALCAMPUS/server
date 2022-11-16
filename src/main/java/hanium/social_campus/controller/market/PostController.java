@@ -7,9 +7,6 @@ import hanium.social_campus.controller.dto.marketDto.PostListDto;
 import hanium.social_campus.service.market.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +31,7 @@ public class PostController {
     // 게시물 작성
     @PostMapping
     public void createPost(@RequestPart(value = "postReq") PostCreateDto postCreateDto,
-                           @RequestPart(name = "images")List<MultipartFile> images) throws IOException {
+                           @RequestPart(value = "images")List<MultipartFile> images) throws IOException {
         log.info(postCreateDto.toString());
         postService.createPost(postCreateDto, images);
     }
@@ -50,6 +47,12 @@ public class PostController {
     public void editPost(@PathVariable("post_id") Long id, @RequestBody PostEditDto postEditDto) {
         postService.editPost(id, postEditDto);
     }
+
+    @DeleteMapping("/{post_id}")
+    public void deletePost(@PathVariable("post_id") Long id) {
+        postService.deletePost(id);
+    }
+
 
 
 }

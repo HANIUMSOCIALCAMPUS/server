@@ -2,6 +2,7 @@ package hanium.social_campus.domain.market;
 
 import hanium.social_campus.domain.BaseEntity;
 import hanium.social_campus.domain.Member;
+import hanium.social_campus.domain.chat.ChatRoom;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -21,6 +22,10 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_room_id")
+    private ChatRoom chatRoom;
+
     private String title;
 
     private String description;
@@ -33,6 +38,7 @@ public class Post extends BaseEntity {
 
     private int price;
 
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     List<PostImage> postImages = new ArrayList<>();
 
@@ -42,9 +48,10 @@ public class Post extends BaseEntity {
             postImage.setPost(this);
         }
     }
-    public static Post create(Member member, String title, DealType dealType, String description, int price, List<PostImage> postImages) {
+    public static Post create(Member member, ChatRoom chatRoom, String title, DealType dealType, String description, int price, List<PostImage> postImages) {
         Post post = new Post();
         post.member = member;
+        post.chatRoom = chatRoom;
         post.title = title;
         post.dealType = dealType;
         post.description = description;

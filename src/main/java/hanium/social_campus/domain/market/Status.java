@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 
 public enum Status {
-    ING("ing"), END("end");
+    ING("ing"), END("end"), DELETE("delete");
 
     private final String value;
 

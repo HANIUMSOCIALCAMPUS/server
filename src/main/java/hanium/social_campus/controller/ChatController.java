@@ -42,6 +42,7 @@ public class ChatController {
     public void sendMessage(@RequestBody SendMessageDto sendMessageDto, SimpMessageHeaderAccessor accessor){
         log.info("메시지: {}", sendMessageDto.getMessage());
 
+        // stomp
         String jwtToken = accessor.getFirstNativeHeader("Authorization").substring(7);
         if (tokenProvider.validateToken(jwtToken)) {
             Authentication authentication = tokenProvider.getAuthentication(jwtToken);
@@ -55,5 +56,8 @@ public class ChatController {
         redisPublisher.publish(new ChannelTopic("/sub/chat/" + sendMessageDto.getRoomId()), new ChatMessageResponseDto(chat));
 
     }
+
+
+
 
 }
