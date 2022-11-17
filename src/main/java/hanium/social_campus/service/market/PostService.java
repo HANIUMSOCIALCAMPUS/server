@@ -60,18 +60,31 @@ public class PostService {
         return new PostDetailDto(post);
     }
 
-    //post 작성
+    // post 작성
     public void createPost(PostCreateDto postCreateDto, List<MultipartFile> images) throws IOException {
+
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new ApiException(NOT_FOUND_MEMBER)
         );
-        List<String> imageUrls = s3Uploader.uploadFiles(images, "post");
-        List<PostImage> saveImages = new ArrayList<>();
-        for (String imageUrl : imageUrls) {
-            saveImages.add(new PostImage(imageUrl));
-        }
-        DealType dealType = DealType.from(postCreateDto.getDealType());
 
+        List<PostImage> saveImages = new ArrayList<>();
+
+        // 이미지가 존재하지 않을 경우
+        if (images == null) {
+            saveImages.add(new PostImage(DefaultImageEnv.DEFAULT_IMAGE_URL));
+        }else{
+            List<String> imageUrls = s3Uploader.uploadFiles(images, "post");
+            for (String imageUrl : imageUrls) {
+                saveImages.add(new PostImage(imageUrl));
+            }
+        }
+
+        savePost(member, postCreateDto, saveImages);
+    }
+
+    // post 저장
+    public void savePost(Member member, PostCreateDto postCreateDto, List<PostImage> saveImages) {
+        DealType dealType = DealType.from(postCreateDto.getDealType());
         ChatRoom chatRoom = chatRoomService.createChatRoom();
         Post post = Post.create(member, chatRoom, postCreateDto.getTitle(), dealType, postCreateDto.getDescription(), postCreateDto.getPrice(), saveImages);
         postRepository.save(post);
@@ -93,6 +106,7 @@ public class PostService {
         );
         postRepository.delete(post);
     }
+
 
 
 }

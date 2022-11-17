@@ -4,7 +4,9 @@ import hanium.social_campus.controller.dto.marketDto.PostCreateDto;
 import hanium.social_campus.controller.dto.marketDto.PostDetailDto;
 import hanium.social_campus.controller.dto.marketDto.PostEditDto;
 import hanium.social_campus.controller.dto.marketDto.PostListDto;
+import hanium.social_campus.controller.exception.ApiException;
 import hanium.social_campus.service.market.PostService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+
+import static hanium.social_campus.controller.exception.ErrorCode.NOT_EXIT_IMAGE;
 
 @RequestMapping("/user/post")
 @Slf4j
@@ -31,8 +35,7 @@ public class PostController {
     // 게시물 작성
     @PostMapping
     public void createPost(@RequestPart(value = "postReq") PostCreateDto postCreateDto,
-                           @RequestPart(value = "images")List<MultipartFile> images) throws IOException {
-        log.info(postCreateDto.toString());
+                           @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
         postService.createPost(postCreateDto, images);
     }
 
@@ -51,6 +54,16 @@ public class PostController {
     @DeleteMapping("/{post_id}")
     public void deletePost(@PathVariable("post_id") Long id) {
         postService.deletePost(id);
+    }
+
+    @PostMapping("/sex")
+    public String sex(@RequestPart("test") TestDto testDto) {
+        return testDto.getTitle();
+    }
+
+    @Data
+    static class TestDto{
+        private String title;
     }
 
 
