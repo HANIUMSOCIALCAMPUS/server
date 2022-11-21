@@ -1,9 +1,6 @@
 package hanium.social_campus.controller.market;
 
-import hanium.social_campus.controller.dto.marketDto.PostCreateDto;
-import hanium.social_campus.controller.dto.marketDto.PostDetailDto;
-import hanium.social_campus.controller.dto.marketDto.PostEditDto;
-import hanium.social_campus.controller.dto.marketDto.PostListDto;
+import hanium.social_campus.controller.dto.marketDto.*;
 import hanium.social_campus.controller.exception.ApiException;
 import hanium.social_campus.service.market.PostService;
 import lombok.Data;
@@ -51,21 +48,22 @@ public class PostController {
         postService.editPost(id, postEditDto);
     }
 
+    // 삭제 - 아직 구현 x
     @DeleteMapping("/{post_id}")
     public void deletePost(@PathVariable("post_id") Long id) {
         postService.deletePost(id);
     }
 
-    @PostMapping("/sex")
-    public String sex(@RequestPart("test") TestDto testDto) {
-        return testDto.getTitle();
+    // 검색 - 제목
+    @GetMapping("/search")
+    public ResponseEntity<List<PostListDto>> searchPost(@RequestParam("value") String value) {
+        return ResponseEntity.ok(postService.searchPost(value));
     }
 
-    @Data
-    static class TestDto{
-        private String title;
+    @PostMapping("{post_id}/note")
+    public void sendNote(@PathVariable("post_id") Long id, @RequestBody PostNoteDto postNoteDto) {
+        postService.sendNote(id, postNoteDto);
     }
-
 
 
 }

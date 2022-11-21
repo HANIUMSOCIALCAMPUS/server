@@ -18,10 +18,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @EntityGraph(attributePaths = {"member"})
     List<Post> findByDealType(DealType dealType);
 
+    @Override
+    @EntityGraph(attributePaths = {"member"})
+    Optional<Post> findById(Long id);
+
     // 상세 조회
     @EntityGraph(attributePaths = {"member", "postImages", "chatRoom"})
     @Query("select p from Post p where p.id = :id")
     Optional<Post> findByIdDetail(@Param("id") Long id);
 
+    @EntityGraph(attributePaths = {"member"})
+    @Query("select p from Post p where p.title like %:title%")
+    List<Post> findByTitleSearch(@Param("title") String title);
 
 }

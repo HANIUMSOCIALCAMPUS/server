@@ -16,6 +16,8 @@ public class PostListDto {
 
     private String nickname;
 
+    private String dealType;
+
     // 대표이미지
     private String postImageUrl;
 
@@ -25,6 +27,7 @@ public class PostListDto {
         price = post.getPrice();
         status = post.getStatus().getValue();
         nickname = post.getMember().getNickname();
+        dealType = post.getDealType().getValue();
         postImageUrl = post.getPostImages().get(0).getUrl();
     }
 }

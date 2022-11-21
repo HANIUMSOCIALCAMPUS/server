@@ -26,6 +26,10 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
 
+    @OneToMany(mappedBy = "post")
+    private List<Note> notes = new ArrayList<>();
+
+
     private String title;
 
     private String description;

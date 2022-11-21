@@ -47,9 +47,9 @@ public class ChatRoomController {
                 () -> new SocialException(ErrorCode.NOT_FOUND_CLUB)
         );
 
-        //
-        ChannelTopic channelTopic = new ChannelTopic("/sub/chat/" + club.getChatRoom().getId());
-        redisMessageListenerContainer.addMessageListener(redisSubscriber, channelTopic);
+
+//        ChannelTopic channelTopic = new ChannelTopic("/sub/chat/" + club.getChatRoom().getId());
+//        redisMessageListenerContainer.addMessageListener(redisSubscriber, channelTopic);
 
         List<Chat> chats = chatRepository.findChatsByCreatedDateDesc(club.getChatRoom().getId(), offset);
         chats.sort(Comparator.comparing(Chat::getCreateAt));
@@ -63,8 +63,8 @@ public class ChatRoomController {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new ApiException(ErrorCode.NOT_FOUND_MARKET)
         );
-        ChannelTopic channelTopic = new ChannelTopic("/sub/chat/" + post.getChatRoom().getId());
-        redisMessageListenerContainer.addMessageListener(redisSubscriber, channelTopic);
+//        ChannelTopic channelTopic = new ChannelTopic("/sub/chat/" + post.getChatRoom().getId());
+//        redisMessageListenerContainer.addMessageListener(redisSubscriber, channelTopic);
 
         List<Chat> chatList = chatRepository.findByChatRoom(post.getChatRoom(), pageable);
         return ResponseEntity.ok(new ChatRoomDto(post.getChatRoom().getId(), chatList));

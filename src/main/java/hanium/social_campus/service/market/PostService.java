@@ -2,20 +2,15 @@ package hanium.social_campus.service.market;
 
 import hanium.social_campus.auth.config.SecurityUtil;
 import hanium.social_campus.config.s3.S3Uploader;
-import hanium.social_campus.controller.dto.marketDto.PostCreateDto;
-import hanium.social_campus.controller.dto.marketDto.PostDetailDto;
-import hanium.social_campus.controller.dto.marketDto.PostEditDto;
-import hanium.social_campus.controller.dto.marketDto.PostListDto;
+import hanium.social_campus.controller.dto.marketDto.*;
 import hanium.social_campus.controller.exception.ApiException;
 import hanium.social_campus.controller.exception.ErrorCode;
 import hanium.social_campus.domain.Member;
 import hanium.social_campus.domain.chat.ChatRoom;
 import hanium.social_campus.domain.group.ClubType;
-import hanium.social_campus.domain.market.DealType;
-import hanium.social_campus.domain.market.Post;
-import hanium.social_campus.domain.market.PostImage;
-import hanium.social_campus.domain.market.Status;
+import hanium.social_campus.domain.market.*;
 import hanium.social_campus.repository.MemberRepository;
+import hanium.social_campus.repository.market.NoteRepository;
 import hanium.social_campus.repository.market.PostImageRepository;
 import hanium.social_campus.repository.market.PostRepository;
 import hanium.social_campus.service.chatService.ChatRoomService;
@@ -41,6 +36,7 @@ public class PostService {
     private final S3Uploader s3Uploader;
     private final PostRepository postRepository;
     private final ChatRoomService chatRoomService;
+    private final NoteRepository noteRepository;
 
     //post 리스트 반환
     public List<PostListDto> postListByDealType(String dealType) {
@@ -105,6 +101,38 @@ public class PostService {
                 () -> new ApiException(NOT_FOUND_MARKET)
         );
         postRepository.delete(post);
+    }
+
+    public List<PostListDto> searchPost(String title) {
+        List<Post> byTitleSearch = postRepository.findByTitleSearch(title);
+        if (byTitleSearch.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return byTitleSearch.stream().map(PostListDto::new).collect(Collectors.toList());
+    }
+
+    /*
+    쪽지 보내기
+     */
+    public void sendNote(Long id, PostNoteDto postNoteDto) {
+        // 보낸 사람
+        Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new ApiException(NOT_FOUND_MEMBER)
+        );
+
+        // 게시물
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new ApiException(NOT_FOUND_MARKET)
+        );
+
+        Note note = Note.builder()
+                .post(post)
+                .member(member)
+                .message(postNoteDto.getMessage())
+                .build();
+
+        noteRepository.save(note);
+
     }
 
 
