@@ -25,7 +25,7 @@ public class MemberController {
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new EntityNotFoundException("존재하지 않는 회원입니다.")
         );
-        return ResponseEntity.ok(new MyDto(member.getNickname(), member.getEmail()));
+        return ResponseEntity.ok(new MyDto(member));
     }
 
     @PostMapping("/logout")

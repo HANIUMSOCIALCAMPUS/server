@@ -16,6 +16,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // paging 여부에 따라 변경 가능
     @EntityGraph(attributePaths = {"member"})
+    @Query("select p from Post p where p.dealType = :dealType order by p.createAt desc")
     List<Post> findByDealType(DealType dealType);
 
     @Override

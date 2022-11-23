@@ -60,9 +60,10 @@ public class PostController {
         return ResponseEntity.ok(postService.searchPost(value));
     }
 
+    // 쪽지 작성
     @PostMapping("{post_id}/note")
-    public void sendNote(@PathVariable("post_id") Long id, @RequestBody PostNoteDto postNoteDto) {
-        postService.sendNote(id, postNoteDto);
+    public ResponseEntity sendNote(@PathVariable("post_id") Long id, @RequestBody PostNoteDto postNoteDto) {
+        return ResponseEntity.ok(postService.sendNote(id, postNoteDto));
     }
 
 

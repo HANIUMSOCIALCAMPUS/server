@@ -3,6 +3,7 @@ package hanium.social_campus.service.market;
 import hanium.social_campus.auth.config.SecurityUtil;
 import hanium.social_campus.config.s3.S3Uploader;
 import hanium.social_campus.controller.dto.marketDto.*;
+import hanium.social_campus.controller.dto.noteDto.NoteDetailDto;
 import hanium.social_campus.controller.exception.ApiException;
 import hanium.social_campus.controller.exception.ErrorCode;
 import hanium.social_campus.domain.Member;
@@ -114,7 +115,7 @@ public class PostService {
     /*
     쪽지 보내기
      */
-    public void sendNote(Long id, PostNoteDto postNoteDto) {
+    public NoteDetailDto sendNote(Long id, PostNoteDto postNoteDto) {
         // 보낸 사람
         Member member = memberRepository.findByLoginId(SecurityUtil.getCurrentMemberId()).orElseThrow(
                 () -> new ApiException(NOT_FOUND_MEMBER)
@@ -133,8 +134,9 @@ public class PostService {
 
         noteRepository.save(note);
 
-    }
+        return new NoteDetailDto(note, "send");
 
+    }
 
 
 }

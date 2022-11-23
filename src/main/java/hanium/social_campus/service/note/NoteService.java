@@ -3,7 +3,6 @@ package hanium.social_campus.service.note;
 import hanium.social_campus.auth.config.SecurityUtil;
 import hanium.social_campus.controller.dto.marketDto.PostListDto;
 import hanium.social_campus.controller.dto.noteDto.NoteDetailDto;
-import hanium.social_campus.controller.dto.noteDto.NoteListDto;
 import hanium.social_campus.controller.exception.ApiException;
 import hanium.social_campus.controller.exception.ErrorCode;
 import hanium.social_campus.domain.Member;
@@ -13,12 +12,14 @@ import hanium.social_campus.repository.MemberRepository;
 import hanium.social_campus.repository.market.NoteRepository;
 import hanium.social_campus.repository.market.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NoteService {
@@ -52,7 +53,9 @@ public class NoteService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new ApiException(ErrorCode.NOT_FOUND_MARKET)
         );
-        return post.getNotes().stream().map(
+        List<Note> notes = noteRepository.findAllWithDetail(member, post);
+
+        return notes.stream().map(
                 n -> {
                     if (n.getSender() == member){
                         return new NoteDetailDto(n, "send");
